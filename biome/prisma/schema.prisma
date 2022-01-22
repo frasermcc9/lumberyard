@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// All timestamp units are in seconds
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["interactiveTransactions"]
+    binaryTargets   = ["native", "linux-musl"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Log {
+    id      Int    @id @default(autoincrement())
+    message String
+
+    User   User?   @relation(fields: [userId], references: [id])
+    userId String?
+}
+
+model User {
+    id     String @unique
+    apiKey String @unique
+
+    logs Log[]
+}

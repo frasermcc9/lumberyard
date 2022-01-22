@@ -1,0 +1,31 @@
+{
+  "name": "node-forest",
+  "version": "1.5.1",
+  "description": "The latest in vulnerability-free logging libraries",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "run-p dev:*",
+    "dev:daemon": "nodemon",
+    "dev:transpile": "tsc --watch",
+    "build": "rimraf ./dist && tsc"
+  },
+  "keywords": [
+    "logging"
+  ],
+  "author": "Fraser McCallum",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/figlet": "^1.5.4",
+    "@types/node": "^17.0.8",
+    "nodemon": "^2.0.15",
+    "npm-run-all": "^4.1.5",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "figlet": "^1.5.2",
+    "isomorphic-unfetch": "^3.1.0"
+  }
+}
