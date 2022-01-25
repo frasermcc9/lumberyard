@@ -6,10 +6,10 @@ export class UserService {
   constructor(private readonly userStore: UserStoreService) {}
 
   create(uId: string) {
-    this.userStore.upsertUser(uId);
+    this.userStore.createUser(uId);
   }
 
   getUser(uId: string) {
-    return this.userStore.getUser({ id: uId });
+    return this.userStore.findOrCreate({ id: uId });
   }
 }

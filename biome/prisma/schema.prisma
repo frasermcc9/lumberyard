@@ -17,13 +17,25 @@ model Log {
     id      Int    @id @default(autoincrement())
     message String
 
-    User   User?   @relation(fields: [userId], references: [id])
-    userId String?
+    Project   Project? @relation(fields: [projectId], references: [id])
+    projectId Int?
+
+    createdAt DateTime @default(now())
+}
+
+model Project {
+    id     Int    @id @default(autoincrement())
+    name   String
+    apiKey String @unique
+
+    owner   User   @relation(fields: [ownerId], references: [id])
+    ownerId String
+
+    logs Log[]
 }
 
 model User {
-    id     String @unique
-    apiKey String @unique
+    id String @id @unique
 
-    logs Log[]
+    projects Project[]
 }

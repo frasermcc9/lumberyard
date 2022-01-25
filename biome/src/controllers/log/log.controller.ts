@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { Bench } from "node-forest";
 import { ApiKeyGuard } from "src/auth/token/token.guard";
+import { ProjectStoreService } from "src/db/project-store/project-store.service";
 import { UserStoreService } from "src/db/user-store/user-store.service";
 import { CreateLogDto } from "./dto/create-log.dto";
 import { LogService } from "./log.service";
@@ -20,7 +21,7 @@ import { LogService } from "./log.service";
 export class LogController {
   constructor(
     private readonly logService: LogService,
-    private readonly userStore: UserStoreService,
+    private readonly projectStore: ProjectStoreService,
   ) {}
 
   @Post()
@@ -31,7 +32,7 @@ export class LogController {
     @Body() createLogDto: CreateLogDto,
     @Headers("x-api-key") apiKey: string,
   ) {
-    const user = await this.userStore.getUser({ token: apiKey });
+    const user = await this.projectStore.getProjectByApiKey({ apiKey });
 
     if (!user) {
       throw new HttpException(

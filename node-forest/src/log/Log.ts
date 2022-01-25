@@ -4,10 +4,6 @@ import { LogLevel } from "../settings/declarations";
 import { Forest } from "../settings/Forest";
 import { textSync } from "figlet";
 
-export function forest(name: string) {
-  return name.toUpperCase();
-}
-
 const config = Forest.get();
 
 export function ASSERT(logModule: string, condition: boolean) {
@@ -20,6 +16,11 @@ let MAX_LEVEL_PAD = 8;
 let MAX_MODULE_PAD = 8;
 let TIME_LENGTH = 11;
 
+export function forest(name: string) {
+  MAX_MODULE_PAD = Math.max(MAX_MODULE_PAD, name.length + 1);
+  return name.toUpperCase();
+}
+
 export function LOG<T extends LogLevel>(
   logModule: string,
   level: T,
@@ -29,7 +30,9 @@ export function LOG<T extends LogLevel>(
     return;
   }
 
-  const asString = stringed(...args).slice(1, -1);
+  const asString = stringed(...args)
+    .slice(1, -1)
+    .trim();
 
   const time = new Date().toLocaleTimeString();
   const timePad = " ".repeat(TIME_LENGTH - time.length);
@@ -37,7 +40,6 @@ export function LOG<T extends LogLevel>(
   const requiredLevelPad = Math.max(0, MAX_LEVEL_PAD - level.length);
   const levelPad = " ".repeat(requiredLevelPad);
 
-  MAX_MODULE_PAD = Math.max(MAX_MODULE_PAD, logModule.length + 1);
   const requiredModulePad = Math.max(0, MAX_MODULE_PAD - logModule.length);
   const modulePad = " ".repeat(requiredModulePad);
 

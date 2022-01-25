@@ -5,11 +5,11 @@ import { DbService } from "../db.service";
 export class LogStoreService {
   constructor(private readonly db: DbService) {}
 
-  async insertLog(logMessage: string, userId?: string) {
+  async insertLog(logMessage: string, projectId?: number) {
     const log = await this.db.log.create({
       data: {
         message: logMessage,
-        userId,
+        projectId,
       },
     });
 

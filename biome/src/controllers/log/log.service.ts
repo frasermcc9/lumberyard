@@ -6,7 +6,7 @@ import { CreateLogDto } from "./dto/create-log.dto";
 export class LogService {
   constructor(private readonly logStore: LogStoreService) {}
 
-  create(createLogDto: CreateLogDto, userId: string) {
+  create(createLogDto: CreateLogDto, projectId: number) {
     const { message } = createLogDto;
 
     if (
@@ -17,6 +17,6 @@ export class LogService {
       throw new HttpException("Invalid message", 400);
     }
 
-    this.logStore.insertLog(createLogDto.message, userId);
+    this.logStore.insertLog(createLogDto.message, projectId);
   }
 }

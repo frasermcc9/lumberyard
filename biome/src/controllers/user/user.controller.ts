@@ -7,19 +7,18 @@ import { User } from "src/util/user.decorator";
 import { UserService } from "./user.service";
 
 @Controller("user")
+@UseGuards(FirebaseAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  @UseGuards(FirebaseAuthGuard)
   @Bench()
+  @Post()
   async create(@User() user: DecodedIdToken) {
     return this.userService.create(user.uid);
   }
 
-  @Get()
-  @UseGuards(FirebaseAuthGuard)
   @Bench()
+  @Get()
   async getUser(@User() user: DecodedIdToken) {
     return this.userService.getUser(user.uid);
   }

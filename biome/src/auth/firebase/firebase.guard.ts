@@ -1,6 +1,9 @@
 import { Injectable, ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
+import { forest, LOG } from "node-forest";
+
+const MOD = forest("FirebaseAuthGuard");
 
 @Injectable()
 export class FirebaseAuthGuard extends AuthGuard("firebase-auth") {
@@ -16,6 +19,8 @@ export class FirebaseAuthGuard extends AuthGuard("firebase-auth") {
     if (isPublic) {
       return true;
     }
+
+    LOG(MOD, "INFO", `Checking firebase auth strategy.`);
 
     return super.canActivate(context);
   }
