@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import useSWR from "swr";
-import { useAuth } from "../../../hooks/useAuth";
 import { fetcher } from "../../../util/fetch";
 import { ClipboardCopyIcon } from "@heroicons/react/outline";
 import { useAlert } from "../common/CornerAlert";
 import CreateProjectModal from "./CreateProjectModal";
 import { useNavigate } from "react-router";
+import Loader from "../../../routes/Loader";
 
 interface ProjectSelectProps {}
 
@@ -48,18 +48,8 @@ const ProjectSelect: React.FC<ProjectSelectProps> = () => {
     );
   };
 
-  console.log(data);
-
-  if (data?.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <Header />
-        <div className="mt-4 mb-20">
-          <h2 className="text-xl">No projects found</h2>
-        </div>
-        <NewProject />
-      </div>
-    );
+  if (!data) {
+    return <Loader />;
   }
 
   return (

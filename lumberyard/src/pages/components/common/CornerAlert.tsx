@@ -106,8 +106,10 @@ export const CornerAlert: React.FC<CornerAlertProps> = ({
         <div
           className={`shadow-lg rounded py-2 px-4 bg-neutral-800 text-gray-100 `}
         >
-          <div className="flex w-full items-center justify-between gap-x-2">
-            <div className={`w-6 ${colorMap[mode]} motion-safe:animate-pulse`}>
+          <div className="flex w-full items-center justify-between gap-x-4">
+            <div
+              className={`min-w-[1.5rem] ${colorMap[mode]} motion-safe:animate-pulse`}
+            >
               {icon}
             </div>
             <div className="text-sm font-medium">{internalMessage}</div>

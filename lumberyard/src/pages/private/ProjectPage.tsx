@@ -1,70 +1,94 @@
+import { CheckCircleIcon, KeyIcon, TrashIcon } from "@heroicons/react/outline";
 import React from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useSWR from "swr";
+import { useAuth } from "../../hooks/useAuth";
+import Loader from "../../routes/Loader";
 import { fetcher } from "../../util/fetch";
+import { useAlert } from "../components/common/CornerAlert";
 import Page from "../components/page/Page";
+import HorizontalTabs from "../components/project/HorizontalTabs";
+import LogList from "../components/project/tabs/LogTab";
+import SettingsTab from "../components/project/tabs/SettingsTab";
 
 interface ProjectPageProps {}
 
 const ProjectPage: React.FC<ProjectPageProps> = () => {
+  const [{ user }] = useAuth();
+
   const { id } = useParams();
-
   const { data } = useSWR(`/project/${id}`, fetcher());
+  const { createAlert } = useAlert();
 
-  if (!data) return null;
+  const navigate = useNavigate();
 
-  console.log(data);
+  const doDelete = async () => {
+    createAlert(
+      {
+        icon: <TrashIcon />,
+        message: "Deleting project...",
+        mode: "info",
+      },
+      4500
+    );
+    await fetcher({
+      bearer: user?.getIdToken(),
+      method: "DELETE",
+    })("/project/" + id);
 
-  let colors = ["bg-neutral-800", "bg-neutral-900"];
-  const getAlternatingBg = (index: number) => {
-    return colors[index % 2];
+    navigate("/");
+    createAlert(
+      {
+        icon: <CheckCircleIcon />,
+        message: "Project deleted",
+        mode: "success",
+      },
+      3500
+    );
   };
 
-  const getLevelColor = (level: string) => {
-    switch (level) {
-      case "[DEBUG]":
-        return "text-neutral-100";
-      case "[INFO]":
-        return "text-sky-400";
-      case "[WARN]":
-        return "text-yellow-500";
-      case "[ERROR]":
-        return "text-orange-500";
-      case "[SUCCESS]":
-        return "text-purple-500";
-      case "[FATAL]":
-        return "text-red-500";
-      default:
-        return "text-neutral-100";
-    }
+  const doKeyReset = async () => {
+    createAlert(
+      {
+        icon: <KeyIcon />,
+        message: "Updating project...",
+        mode: "info",
+      },
+      4500
+    );
+    await fetcher({
+      bearer: user?.getIdToken(),
+      method: "PATCH",
+    })("/project/" + id);
+
+    createAlert(
+      {
+        icon: <CheckCircleIcon />,
+        message: "API key updated!",
+        mode: "success",
+      },
+      3500
+    );
   };
+
+  if (!data) return <Loader />;
 
   return (
     <Page>
-      <Page.Spacing />
+      <Page.Spacing spacing="py-6" />
       <div className="mx-8">
-        <h1 className="text-3xl text-center font-bold mb-8 text-">
-          {data.name}
-        </h1>
-        <div className="mx-auto text-lg">
-          {data.logs.map((log: any, i: number) => {
-            const regex = /(\[.*?\])/g;
-            const message: string = log.message;
-
-            const matches = Array.from(message.matchAll(regex), (r) => r[0]);
-            const level = matches[1];
-            return (
-              <pre
-                key={i}
-                className={`font-mono py-1 ${getAlternatingBg(
-                  i
-                )} ${getLevelColor(level)}`}
-              >
-                {log.message}
-              </pre>
-            );
-          })}
-        </div>
+        <h1 className="text-3xl text-center font-bold">{data.name}</h1>
+        <HorizontalTabs
+          tabs={[
+            { content: <LogList logs={data.logs} />, header: "Logs" },
+            {
+              content: (
+                <SettingsTab doApiKeyRefresh={doKeyReset} doDelete={doDelete} />
+              ),
+              header: "Settings",
+            },
+          ]}
+        />
       </div>
     </Page>
   );

@@ -4,7 +4,16 @@ import Navigation from "./Navigation";
 
 interface PageProps {}
 
-type Space = "py-2" | "py-4" | "py-8" | "py-12" | "py-16" | "py-20" | "py-24";
+type Space =
+  | "py-2"
+  | "py-4"
+  | "py-6"
+  | "py-8"
+  | "py-12"
+  | "py-16"
+  | "py-20"
+  | "py-24";
+
 type PageFC = React.FC<PageProps> & { Spacing: React.FC<{ spacing?: Space }> };
 
 const Page: PageFC = ({ children }) => {
