@@ -1,6 +1,6 @@
 {
   "name": "node-forest",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "The latest in vulnerability-free logging libraries",
   "main": "dist/index.js",
   "scripts": {

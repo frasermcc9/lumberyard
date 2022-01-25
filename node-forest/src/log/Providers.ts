@@ -75,7 +75,7 @@ export class RemoteProvider implements Provider {
 type Environment = "production" | "development";
 
 const DEV_URL = "http://localhost:8080/log";
-const PROD_URL = "https://node-forest.xyz/log";
+const PROD_URL = "https://forest.fraserm.cc/log";
 
 const getUrl = (environment: Environment) => {
   if (environment === "production") {
